@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> <!-- Thymeleaf 네임스페이스 선언 -->
+<head>
+    <!-- 문서의 기본 설정 -->
+    <meta charset="UTF-8"> <!-- 문서의 문자 인코딩 설정 -->
+    <title>로그인</title> <!-- 브라우저 탭 제목 설정 -->
+</head>
+<body>
+<h1>로그인</h1> <!-- 로그인 페이지의 제목 -->
+
+<!-- 로그인 폼 -->
+<form th:action="@{/login}" method="post"> <!-- Thymeleaf를 이용해 /login으로 POST 요청 -->
+    <div>
+        <label for="username">아이디</label> <!-- 아이디 입력 필드에 대한 라벨 -->
+        <input type="text" id="username" name="username"/> <!-- 사용자 ID 입력 -->
+    </div>
+    <div>
+        <label for="password">비밀번호</label> <!-- 비밀번호 입력 필드에 대한 라벨 -->
+        <input type="password" id="password" name="password"/> <!-- 사용자 비밀번호 입력 -->
+    </div>
+    <div>
+        <button type="submit">로그인</button> <!-- 로그인 버튼 -->
+    </div>
+</form>
+
+<!-- 회원가입으로 이동할 수 있는 링크 -->
+<p>계정이 없으신가요? <a href="/register">회원가입</a></p> <!-- 회원가입 페이지로 연결 -->
+<script>
+    // 자바스크립트를 사용한 로그인 요청 처리 (사용하지 않는 경우 주석 처리 가능)
+    function login() {
+        var username = document.getElementById("username").value; // 입력된 사용자 ID 가져오기
+        var password = document.getElementById("password").value; // 입력된 비밀번호 가져오기
+
+        // Fetch API를 이용한 POST 요청
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `username=${username}&password=${password}` // 폼 데이터 전달
+        })
+            .then(response => response.json()) // 서버 응답을 JSON으로 처리
+            .then(data => {
+                if (data === true) { // 로그인 성공 여부 확인
+                    window.location.href = "/main.html"; // 성공 시 메인 페이지로 이동
+                } else {
+                    alert("로그인 실패. 다시 시도해주세요."); // 실패 시 경고 메시지
+                }
+            })
+            .catch(error => { // 오류 처리
+                console.error('Error:', error);
+                alert("오류가 발생했습니다. 다시 시도해주세요.");
+            });
+    }
+</script>
+
+</body>
+</html>

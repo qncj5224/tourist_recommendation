@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"> <!-- 문서의 문자 인코딩 설정 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 모바일 화면에서도 적절하게 보이도록 설정 -->
+  <title>Tourist Spots</title> <!-- 페이지 제목 -->
+  <link rel="stylesheet" href="/css/styles.css"> <!-- 외부 CSS 파일 연결 -->
+</head>
+<body>
+
+<!-- 페이지 헤더 -->
+<h1>Tourist Spots</h1>
+
+<!-- 관광명소 목록을 그리드 형태로 표시 -->
+<div class="spot-grid">
+  <!-- 각 관광명소 데이터를 반복하여 카드 형태로 렌더링 -->
+  <div th:each="spot : ${spots}" class="spot-card">
+    <!-- 관광명소 대표 이미지 -->
+    <img th:src="@{/tourist_images/{imageName}(imageName=${spot.image1})}" alt="Tourist Spot Image">
+
+    <!-- 관광명소 이름 -->
+    <h2 th:text="${spot.name}"></h2>
+
+    <!-- 관광명소 주소 -->
+    <p><strong>Address:</strong> <span th:text="${spot.address}"></span></p>
+
+    <!-- 관광명소 평점 -->
+    <p><strong>Rating:</strong> <span th:text="${spot.rating}"></span></p>
+
+    <!-- 관광명소 태그 -->
+    <p><strong>Tags:</strong> <span th:text="${spot.tags}"></span></p>
+
+    <!-- 상세 페이지로 이동하는 링크 -->
+    <a th:href="@{'/spot/' + ${spot.name}}">View Details</a>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- HTML 문서의 기본 설정 -->
+  <meta charset="UTF-8"> <!-- 문서의 문자셋을 UTF-8로 설정 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 반응형 웹 디자인을 위한 뷰포트 설정 -->
+  <title>Food Spots</title> <!-- 문서의 제목 설정 -->
+  <link rel="stylesheet" href="/css/styles.css"> <!-- CSS 파일 링크 -->
+</head>
+<body>
+<h1>Food Spots</h1> <!-- 페이지의 제목 -->
+
+<!-- 음식점 목록을 표시할 그리드 컨테이너 -->
+<div class="spot-grid">
+  <!-- Thymeleaf를 사용하여 음식점 데이터를 반복적으로 출력 -->
+  <div th:each="spot : ${spots}" class="spot-card">
+    <!-- 이미지 출력 -->
+    <img th:src="@{/food_images/{imageName}(imageName=${spot.image1})}" alt="Food Spot Image">
+    <!-- 음식점 이름 -->
+    <h2 th:text="${spot.name}"></h2>
+    <!-- 음식점 주소 -->
+    <p><strong>Address:</strong> <span th:text="${spot.address}"></span></p>
+    <!-- 음식점 평점 -->
+    <p><strong>Rating:</strong> <span th:text="${spot.rating}"></span></p>
+    <!-- 음식점 태그 -->
+    <p><strong>Tags:</strong> <span th:text="${spot.tags}"></span></p>
+    <!-- 음식점 상세 페이지로 이동하는 링크 -->
+    <a th:href="@{'/food/spot/' + ${spot.name}}">View Details</a>
+  </div>
+</div>
+</body>
+</html>
