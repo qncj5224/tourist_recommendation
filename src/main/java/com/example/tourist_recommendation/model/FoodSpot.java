@@ -181,4 +181,16 @@ public class FoodSpot {
   public void setImage4(String image4) {
     this.image4 = image4;
   }
+
+  @Override
+  public String toString() {
+    return "FoodSpot{" +
+            "name='" + name + '\'' +
+            ", address='" + address + '\'' +
+            ", url='" + url + '\'' +
+            ", rating=" + rating +
+            ", tags='" + tags + '\'' +
+            ", images=" + images +
+            '}';
+  }
 }
