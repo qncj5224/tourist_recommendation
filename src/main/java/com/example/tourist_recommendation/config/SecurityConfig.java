@@ -44,23 +44,24 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        // 인증이 필요 없는 URL 패턴 설정
-                        .requestMatchers("/check-username", "/register", "/css/**", "/js/**").permitAll()
-                        // 그 외 모든 요청은 인증 필요
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        // 커스텀 로그인 페이지 설정
-                        .loginPage("/login")
-                        // 모든 사용자에게 로그인 페이지 접근 허용
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        // 로그아웃 요청은 인증 없이도 허용
-                        .permitAll()
-                );
+        http.authorizeHttpRequests(authorize -> {
+                    // 인증이 필요 없는 URL
+                    authorize
+                            .requestMatchers("/check-username", "/register", "/css/**", "/js/**").permitAll()
+                            // 그 외 모든 요청은 인증 필요
+                            .anyRequest().authenticated();
+                })
+                .formLogin(form -> {
+                    // 커스텀 로그인 페이지 설정
+                    form
+                            .loginPage("/login")
+                            .permitAll();
+                })
+                .logout(logout -> {
+                    // 로그아웃 요청 허용
+                    logout.permitAll();
+                });
+
         // 설정된 SecurityFilterChain 반환
         return http.build();
     }
