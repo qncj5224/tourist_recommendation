@@ -199,4 +199,18 @@ public class TouristSpot {
   public void setImage4(String image4) {
     this.image4 = image4;
   }
+
+  @Override
+  public String toString() {
+    return "TouristSpot{" +
+            "address='" + address + '\'' +
+            ", name='" + name + '\'' +
+            ", url='" + url + '\'' +
+            ", rating=" + rating +
+            ", closedDay='" + closedDay + '\'' +
+            ", tags='" + tags + '\'' +
+            ", images=" + images +
+            '}';
+  }
+
 }
