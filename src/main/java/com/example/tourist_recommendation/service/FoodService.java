@@ -15,8 +15,8 @@ import java.util.Optional;
 
 
 /**
- * FoodService는 음식점 데이터를 처리하고 제공하는 역할을 담당한다.
- * 데이터는 CSV 파일에서 로드된다.
+ * FoodService는 음식점 데이터를 처리하고 제공하는 역할을 담당합니다.
+ * 데이터는 CSV 파일에서 로드됩니다.
  */
 @Service
 public class FoodService {
@@ -29,10 +29,8 @@ public class FoodService {
   public List<FoodSpot> getFoodSpots() {
     List<FoodSpot> spots = new ArrayList<>();
     try {
-      // CSV 파일 읽기
       List<String[]> csvData = readCsvFile("classpath:food_spot.csv");
 
-      // CSV 데이터 파싱 및 객체 생성
       for (String[] row : csvData) {
         parseFoodSpot(row).ifPresent(spots::add);
       }
@@ -43,15 +41,6 @@ public class FoodService {
     }
 
     return spots;
-  }
-
-  /**
-   * FoodService는 음식점 데이터를 처리합니다.
-   */
-  public Optional<FoodSpot> findSpotByName(String name) {
-    return getFoodSpots().stream()
-            .filter(spot -> spot.getName().equalsIgnoreCase(name))
-            .findFirst(); // 이름으로 일치하는 음식점 검색
   }
 
   /**
@@ -66,9 +55,7 @@ public class FoodService {
     File file = ResourceUtils.getFile(filePath);
     CSVReader reader = new CSVReader(new FileReader(file));
     List<String[]> csvData = new ArrayList<>();
-
-    // 첫 번째 줄(헤더) 건너뜀
-    reader.readNext();
+    reader.readNext(); // 헤더 건너뜀
 
     String[] nextLine;
     while ((nextLine = reader.readNext()) != null) {
@@ -109,4 +96,15 @@ public class FoodService {
     }
   }
 
+  /**
+   * 음식점 이름으로 데이터를 검색합니다.
+   *
+   * @param name 음식점 이름
+   * @return 검색된 FoodSpot 객체
+   */
+  public Optional<FoodSpot> findSpotByName(String name) {
+    return getFoodSpots().stream()
+            .filter(spot -> spot.getName().equalsIgnoreCase(name))
+            .findFirst();
+  }
 }
