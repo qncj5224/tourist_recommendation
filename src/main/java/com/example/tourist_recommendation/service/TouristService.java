@@ -86,4 +86,27 @@ public class TouristService {
             .findFirst(); // 이름으로 일치하는 관광명소 검색
   }
 
+  /**
+   * CSV 파일을 읽어 각 줄 데이터를 반환합니다.
+   *
+   * @param filePath CSV 파일 경로
+   * @return CSV 데이터 목록
+   * @throws IOException 파일 읽기 예외
+   * @throws CsvValidationException CSV 형식 예외
+   */
+  private List<String[]> readCsvFile(String filePath) throws IOException, CsvValidationException {
+    File file = ResourceUtils.getFile(filePath);
+    CSVReader reader = new CSVReader(new FileReader(file));
+    List<String[]> csvData = new ArrayList<>();
+
+    // 첫 번째 줄(헤더) 건너뜀
+    reader.readNext();
+
+    String[] nextLine;
+    while ((nextLine = reader.readNext()) != null) {
+      csvData.add(nextLine);
+    }
+    return csvData;
+  }
+
 }
