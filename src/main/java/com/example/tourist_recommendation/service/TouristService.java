@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * TouristService는 관광명소 데이터를 처리하고 제공하는 역할을 한다.
@@ -75,4 +76,14 @@ public class TouristService {
     System.out.println("로드된 관광명소 수: " + spots.size());
     return spots;
   }
+
+  /**
+   * TouristService는 관광명소 데이터를 처리합니다.
+   */
+  public Optional<TouristSpot> findSpotByName(String name) {
+    return getTouristSpots().stream()
+            .filter(spot -> spot.getName().equalsIgnoreCase(name))
+            .findFirst(); // 이름으로 일치하는 관광명소 검색
+  }
+
 }
