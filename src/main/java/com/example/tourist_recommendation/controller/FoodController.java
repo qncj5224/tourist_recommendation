@@ -3,9 +3,11 @@ package com.example.tourist_recommendation.controller;
 import com.example.tourist_recommendation.model.FoodSpot;
 import com.example.tourist_recommendation.service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -43,9 +45,10 @@ public class FoodController {
     @GetMapping("/food/spot/{name}")
     public String foodSpotDetails(@PathVariable String name, Model model) {
         FoodSpot spot = foodService.findSpotByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("Food spot not found: " + name));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Food spot not found: " + name));
         model.addAttribute("spot", spot);
         return "food_spot_detail";
     }
+
 
 }
