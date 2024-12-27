@@ -3,8 +3,8 @@ package com.example.tourist_recommendation.model;
 import jakarta.persistence.*;
 
 /**
- * User 엔티티는 사용자 정보를 저장하는 클래스이다.
- * 데이터베이스 테이블 `users`와 매핑되며, 사용자 아이디, 비밀번호, 이메일, 전화번호 등의 정보를 포함한다.
+ * User 엔티티는 사용자 정보를 저장하는 클래스입니다.
+ * 데이터베이스 테이블 `users`와 매핑되며, 사용자 아이디, 비밀번호, 이메일, 전화번호 등의 정보를 포함합니다.
  */
 @Entity
 @Table(name = "users") // 데이터베이스의 "users" 테이블과 매핑
@@ -29,10 +29,7 @@ public class User {
     @Transient // 이 필드는 데이터베이스에 저장되지 않음
     private String confirmPassword; // 비밀번호 확인용 필드 (UI 상에서 사용)
 
-    /**
-     * @param username 사용자 아이디를 설정
-     * @throws IllegalArgumentException 사용자 아이디가 null이거나 비어있는 경우
-     */
+    // Getter 및 Setter (유효성 검사 추가)
     public void setUsername(String username) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("사용자 아이디는 필수 항목입니다.");
@@ -40,10 +37,6 @@ public class User {
         this.username = username;
     }
 
-    /**
-     * @param password 사용자 비밀번호를 설정
-     * @throws IllegalArgumentException 비밀번호가 null이거나 비어있는 경우
-     */
     public void setPassword(String password) {
         if (password == null || password.trim().isEmpty()) {
             throw new IllegalArgumentException("비밀번호는 필수 항목입니다.");
@@ -51,10 +44,6 @@ public class User {
         this.password = password;
     }
 
-    /**
-     * @param email 사용자 이메일을 설정
-     * @throws IllegalArgumentException 이메일이 null이거나 비어있는 경우
-     */
     public void setEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("이메일은 필수 항목입니다.");
@@ -62,10 +51,6 @@ public class User {
         this.email = email;
     }
 
-    /**
-     * @param phoneNumber 사용자 전화번호를 설정
-     * @throws IllegalArgumentException 전화번호가 null이거나 비어있는 경우
-     */
     public void setPhoneNumber(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
             throw new IllegalArgumentException("전화번호는 필수 항목입니다.");
@@ -73,11 +58,6 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    /**
-     * User 객체의 정보를 문자열로 반환합니다.
-     *
-     * @return 객체 정보
-     */
     @Override
     public String toString() {
         return "User{" +
@@ -87,5 +67,4 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
-
 }
