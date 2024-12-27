@@ -57,19 +57,21 @@ public class UserService {
 
     /**
      * 사용자 등록.
-     * 아이디 중복 여부를 확인하고, 비밀번호를 암호화하여 저장.
+     * 아이디 중복 여부를 확인하고, 비밀번호를 암호화하여 저장합니다.
+     *
      * @param user 등록할 사용자 객체
-     * @throws Exception 아이디가 이미 존재할 경우 예외 발생
+     * @throws UsernameAlreadyExistsException 아이디가 이미 존재할 경우 예외 발생
      */
-    public void register(User user) throws Exception {
+    public void register(User user) throws UsernameAlreadyExistsException {
         // 아이디 중복 체크
         if (isUsernameTaken(user.getUsername())) {
-            throw new Exception("이미 사용 중인 아이디입니다.");
+            throw new UsernameAlreadyExistsException("이미 사용 중인 아이디입니다: " + user.getUsername());
         }
         // 비밀번호 암호화 후 저장
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
 
     /**
      * 아이디의 사용 가능 여부 확인.
