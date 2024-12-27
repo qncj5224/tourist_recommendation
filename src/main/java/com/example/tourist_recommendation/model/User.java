@@ -74,16 +74,18 @@ public class User {
     }
 
     /**
-     * @return 비밀번호 확인 필드
+     * User 객체의 정보를 문자열로 반환합니다.
+     *
+     * @return 객체 정보
      */
-    public String getConfirmPassword() {
-        return confirmPassword;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 
-    /**
-     * @param confirmPassword 비밀번호 확인 필드를 설정
-     */
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
 }
