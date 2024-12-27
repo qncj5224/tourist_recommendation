@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * TouristService는 관광명소 데이터를 처리하고 제공하는 역할을 한다.
- * 데이터는 CSV 파일에서 읽어온다.
+ * TouristService는 관광명소 데이터를 처리하고 제공하는 역할을 담당합니다.
+ * 데이터는 CSV 파일에서 로드됩니다.
  */
 @Service
 public class TouristService {
@@ -28,10 +28,8 @@ public class TouristService {
   public List<TouristSpot> getTouristSpots() {
     List<TouristSpot> spots = new ArrayList<>();
     try {
-      // CSV 파일 읽기
       List<String[]> csvData = readCsvFile("classpath:Tourist_spot.csv");
 
-      // CSV 데이터 파싱 및 객체 생성
       for (String[] row : csvData) {
         parseTouristSpot(row).ifPresent(spots::add);
       }
@@ -42,16 +40,6 @@ public class TouristService {
     }
 
     return spots;
-  }
-
-
-  /**
-   * TouristService는 관광명소 데이터를 처리합니다.
-   */
-  public Optional<TouristSpot> findSpotByName(String name) {
-    return getTouristSpots().stream()
-            .filter(spot -> spot.getName().equalsIgnoreCase(name))
-            .findFirst(); // 이름으로 일치하는 관광명소 검색
   }
 
   /**
@@ -66,9 +54,7 @@ public class TouristService {
     File file = ResourceUtils.getFile(filePath);
     CSVReader reader = new CSVReader(new FileReader(file));
     List<String[]> csvData = new ArrayList<>();
-
-    // 첫 번째 줄(헤더) 건너뜀
-    reader.readNext();
+    reader.readNext(); // 헤더 건너뜀
 
     String[] nextLine;
     while ((nextLine = reader.readNext()) != null) {
@@ -110,4 +96,15 @@ public class TouristService {
     }
   }
 
+  /**
+   * 관광명소 이름으로 데이터를 검색합니다.
+   *
+   * @param name 관광명소 이름
+   * @return 검색된 TouristSpot 객체
+   */
+  public Optional<TouristSpot> findSpotByName(String name) {
+    return getTouristSpots().stream()
+            .filter(spot -> spot.getName().equalsIgnoreCase(name))
+            .findFirst();
+  }
 }
