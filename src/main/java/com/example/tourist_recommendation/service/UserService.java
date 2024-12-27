@@ -45,7 +45,6 @@ public class UserService {
         return isTaken;
     }
 
-
     /**
      * 사용자 이름으로 사용자 조회.
      * @param username 찾을 사용자 이름
@@ -56,6 +55,25 @@ public class UserService {
     }
 
     /**
+     * 비밀번호를 암호화합니다.
+     *
+     * @param password 원본 비밀번호
+     * @return 암호화된 비밀번호
+     */
+    private String encryptPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+    /**
+     * 사용자 객체를 데이터베이스에 저장합니다.
+     *
+     * @param user 저장할 사용자 객체
+     */
+    private void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    /**
      * 사용자 등록.
      * 아이디 중복 여부를 확인하고, 비밀번호를 암호화하여 저장합니다.
      *
@@ -63,15 +81,12 @@ public class UserService {
      * @throws UsernameAlreadyExistsException 아이디가 이미 존재할 경우 예외 발생
      */
     public void register(User user) throws UsernameAlreadyExistsException {
-        // 아이디 중복 체크
         if (isUsernameTaken(user.getUsername())) {
             throw new UsernameAlreadyExistsException("이미 사용 중인 아이디입니다: " + user.getUsername());
         }
-        // 비밀번호 암호화 후 저장
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        user.setPassword(encryptPassword(user.getPassword()));
+        saveUser(user);
     }
-
 
     /**
      * 아이디의 사용 가능 여부 확인.
