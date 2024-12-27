@@ -47,4 +47,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 new ArrayList<>()           // 권한 목록 (현재 비어 있음)
         );
     }
+
+    /**
+     * 사용자 이름으로 사용자 정보를 검색합니다.
+     *
+     * @param username 사용자 이름
+     * @return User 사용자 객체
+     * @throws UsernameNotFoundException 사용자가 존재하지 않을 경우 예외 발생
+     */
+    private User findUserByUsername(String username) throws UsernameNotFoundException {
+        return userService.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
+    }
+
 }
