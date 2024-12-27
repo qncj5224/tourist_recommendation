@@ -1,18 +1,20 @@
 package com.example.tourist_recommendation.model;
 
+import java.util.List;
+
 /**
- * FoodSpot 클래스는 음식점 정보를 나타내는 모델 클래스이다.
- * 이름, 주소, URL, 평점, 태그, 이미지 경로 등을 포함한다.
+ * FoodSpot 클래스는 음식점 정보를 나타내는 모델 클래스입니다.
+ * 음식점 이름, 주소, 평점, 태그, 이미지 목록 등을 포함합니다.
  */
 public class FoodSpot {
 
-  // 음식점 이름
+  // 음식점 이름 (필수)
   private String name;
 
-  // 음식점 주소
+  // 음식점 주소 (필수)
   private String address;
 
-  // 음식점 관련 URL (예: 웹사이트, 리뷰 페이지 등)
+  // 음식점 관련 URL (옵션)
   private String url;
 
   // 음식점 평점 (0.0 ~ 5.0)
@@ -21,39 +23,36 @@ public class FoodSpot {
   // 음식점 관련 태그 (쉼표로 구분된 키워드)
   private String tags;
 
-  // 음식점 이미지를 저장하는 필드
-  private String image1;
-  private String image2;
-  private String image3;
-  private String image4;
+  // 음식점 이미지 목록
+  private List<String> images;
+
+  /**
+   * 기본 생성자.
+   */
+  public FoodSpot() {}
 
   /**
    * FoodSpot 생성자.
-   * 음식점 정보를 초기화한다.
+   * 음식점 정보를 초기화합니다.
    *
    * @param name 음식점 이름
    * @param address 음식점 주소
    * @param url 음식점 관련 URL
    * @param rating 음식점 평점
    * @param tags 음식점 관련 태그
-   * @param image1 첫 번째 이미지 경로
-   * @param image2 두 번째 이미지 경로
-   * @param image3 세 번째 이미지 경로
-   * @param image4 네 번째 이미지 경로
+   * @param images 음식점 이미지 목록
    */
-  public FoodSpot(String name, String address, String url, double rating, String tags, String image1, String image2, String image3, String image4) {
+  public FoodSpot(String name, String address, String url, double rating, String tags, List<String> images) {
     this.name = name;
     this.address = address;
     this.url = url;
     this.rating = rating;
     this.tags = tags;
-    this.image1 = image1;
-    this.image2 = image2;
-    this.image3 = image3;
-    this.image4 = image4;
+    this.images = images;
   }
 
   // Getter 및 Setter 메서드
+
   /**
    * @return 음식점 이름
    */
@@ -63,8 +62,12 @@ public class FoodSpot {
 
   /**
    * @param name 음식점 이름을 설정
+   * @throws IllegalArgumentException 음식점 이름이 비어있거나 null인 경우
    */
   public void setName(String name) {
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("음식점 이름은 필수 항목입니다.");
+    }
     this.name = name;
   }
 
@@ -77,8 +80,12 @@ public class FoodSpot {
 
   /**
    * @param address 음식점 주소를 설정
+   * @throws IllegalArgumentException 음식점 주소가 비어있거나 null인 경우
    */
   public void setAddress(String address) {
+    if (address == null || address.trim().isEmpty()) {
+      throw new IllegalArgumentException("음식점 주소는 필수 항목입니다.");
+    }
     this.address = address;
   }
 
@@ -105,8 +112,12 @@ public class FoodSpot {
 
   /**
    * @param rating 음식점 평점을 설정
+   * @throws IllegalArgumentException 평점이 0.0에서 5.0 사이가 아닌 경우
    */
   public void setRating(double rating) {
+    if (rating < 0.0 || rating > 5.0) {
+      throw new IllegalArgumentException("평점은 0.0에서 5.0 사이여야 합니다.");
+    }
     this.rating = rating;
   }
 
@@ -125,58 +136,33 @@ public class FoodSpot {
   }
 
   /**
-   * @return 첫 번째 이미지 경로
+   * @return 음식점 이미지 목록
    */
-  public String getImage1() {
-    return image1;
+  public List<String> getImages() {
+    return images;
   }
 
   /**
-   * @param image1 첫 번째 이미지 경로를 설정
+   * @param images 음식점 이미지 목록을 설정
    */
-  public void setImage1(String image1) {
-    this.image1 = image1;
+  public void setImages(List<String> images) {
+    this.images = images;
   }
 
   /**
-   * @return 두 번째 이미지 경로
+   * FoodSpot 객체의 정보를 문자열로 반환합니다.
+   *
+   * @return 객체 정보
    */
-  public String getImage2() {
-    return image2;
-  }
-
-  /**
-   * @param image2 두 번째 이미지 경로를 설정
-   */
-  public void setImage2(String image2) {
-    this.image2 = image2;
-  }
-
-  /**
-   * @return 세 번째 이미지 경로
-   */
-  public String getImage3() {
-    return image3;
-  }
-
-  /**
-   * @param image3 세 번째 이미지 경로를 설정
-   */
-  public void setImage3(String image3) {
-    this.image3 = image3;
-  }
-
-  /**
-   * @return 네 번째 이미지 경로
-   */
-  public String getImage4() {
-    return image4;
-  }
-
-  /**
-   * @param image4 네 번째 이미지 경로를 설정
-   */
-  public void setImage4(String image4) {
-    this.image4 = image4;
+  @Override
+  public String toString() {
+    return "FoodSpot{" +
+            "name='" + name + '\'' +
+            ", address='" + address + '\'' +
+            ", url='" + url + '\'' +
+            ", rating=" + rating +
+            ", tags='" + tags + '\'' +
+            ", images=" + images +
+            '}';
   }
 }
