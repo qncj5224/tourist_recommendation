@@ -1,5 +1,7 @@
 package com.example.tourist_recommendation.model;
 
+import java.util.List;
+
 /**
  * FoodSpot 클래스는 음식점 정보를 나타내는 모델 클래스이다.
  * 이름, 주소, URL, 평점, 태그, 이미지 경로 등을 포함한다.
@@ -21,37 +23,28 @@ public class FoodSpot {
   // 음식점 관련 태그 (쉼표로 구분된 키워드)
   private String tags;
 
-  // 음식점 이미지를 저장하는 필드
-  private String image1;
-  private String image2;
-  private String image3;
-  private String image4;
+  // 이미지 필드를 List<String>으로 통합
+  private List<String> images;
 
-  /**
-   * FoodSpot 생성자.
-   * 음식점 정보를 초기화한다.
-   *
-   * @param name 음식점 이름
-   * @param address 음식점 주소
-   * @param url 음식점 관련 URL
-   * @param rating 음식점 평점
-   * @param tags 음식점 관련 태그
-   * @param image1 첫 번째 이미지 경로
-   * @param image2 두 번째 이미지 경로
-   * @param image3 세 번째 이미지 경로
-   * @param image4 네 번째 이미지 경로
-   */
-  public FoodSpot(String name, String address, String url, double rating, String tags, String image1, String image2, String image3, String image4) {
+  // 수정된 생성자
+  public FoodSpot(String name, String address, String url, double rating, String tags, List<String> images) {
     this.name = name;
     this.address = address;
     this.url = url;
     this.rating = rating;
     this.tags = tags;
-    this.image1 = image1;
-    this.image2 = image2;
-    this.image3 = image3;
-    this.image4 = image4;
+    this.images = images;
   }
+
+  // 추가된 Getter 및 Setter
+  public List<String> getImages() {
+    return images;
+  }
+
+  public void setImages(List<String> images) {
+    this.images = images;
+  }
+
 
   // Getter 및 Setter 메서드
   /**
