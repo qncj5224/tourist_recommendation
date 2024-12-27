@@ -62,6 +62,9 @@ public class TouristSpot {
    * @param address 관광 명소 주소를 설정
    */
   public void setAddress(String address) {
+    if (address == null || address.trim().isEmpty()) {
+      throw new IllegalArgumentException("관광 명소 주소는 필수 항목입니다.");
+    }
     this.address = address;
   }
 
@@ -76,6 +79,9 @@ public class TouristSpot {
    * @param name 관광 명소 이름을 설정
    */
   public void setName(String name) {
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("관광 명소 이름은 필수 항목입니다.");
+    }
     this.name = name;
   }
 
@@ -104,6 +110,9 @@ public class TouristSpot {
    * @param rating 관광 명소 평점을 설정
    */
   public void setRating(double rating) {
+    if (rating < 0.0 || rating > 5.0) {
+      throw new IllegalArgumentException("평점은 0.0에서 5.0 사이여야 합니다.");
+    }
     this.rating = rating;
   }
 
