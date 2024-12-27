@@ -106,5 +106,36 @@ public class FoodService {
     return csvData;
   }
 
+  /**
+   * CSV 데이터 한 줄을 FoodSpot 객체로 변환합니다.
+   *
+   * @param csvRow CSV 데이터 한 줄
+   * @return FoodSpot 객체
+   */
+  private Optional<FoodSpot> parseFoodSpot(String[] csvRow) {
+    if (csvRow.length < 9) {
+      System.out.println("행에 예상보다 적은 데이터가 있습니다: " + String.join(",", csvRow));
+      return Optional.empty();
+    }
+
+    try {
+      String name = csvRow[0].trim();
+      String address = csvRow[1].trim();
+      String url = csvRow[2].trim();
+      double rating = Double.parseDouble(csvRow[3].trim());
+      String tags = csvRow[4].trim();
+      List<String> images = List.of(
+              csvRow[5].trim(),
+              csvRow[6].trim(),
+              csvRow[7].trim(),
+              csvRow[8].trim()
+      );
+
+      return Optional.of(new FoodSpot(name, address, url, rating, tags, images));
+    } catch (Exception e) {
+      System.out.println("데이터 파싱 실패: " + String.join(",", csvRow));
+      return Optional.empty();
+    }
+  }
 
 }
