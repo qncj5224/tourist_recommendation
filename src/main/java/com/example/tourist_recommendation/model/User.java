@@ -1,14 +1,19 @@
 package com.example.tourist_recommendation.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * User 엔티티는 사용자 정보를 저장하는 클래스입니다.
- * 데이터베이스 테이블 `users`와 매핑되며, 사용자 아이디, 비밀번호, 이메일, 전화번호 등의 정보를 포함합니다.
+ * Spring Security의 UserDetails 인터페이스를 구현하여 인증에 사용됩니다.
  */
 @Entity
 @Table(name = "users") // 데이터베이스의 "users" 테이블과 매핑
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Primary Key 자동 생성 전략
@@ -66,5 +71,42 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
+    }
+
+    // UserDetails 인터페이스 구현
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 권한을 반환 (현재는 빈 리스트 반환)
+        return Collections.emptyList();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // 계정 만료되지 않음
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // 계정 잠기지 않음
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // 자격 증명 만료되지 않음
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // 계정 활성화 상태
     }
 }

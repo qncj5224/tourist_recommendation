@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     /**
-     * 사용자 이름으로 사용자 정보를 로드한다.
+     * 사용자 이름으로 사용자 정보를 로드합니다.
      *
      * @param username 사용자 이름
      * @return UserDetails Spring Security의 사용자 정보 객체
@@ -36,17 +36,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // UserService를 통해 사용자 정보를 검색
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        // Spring Security의 User 객체로 변환하여 반환
+        User user = findUserByUsername(username);  // 사용자 검색
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),         // 사용자 이름
                 user.getPassword(),         // 암호화된 비밀번호
                 new ArrayList<>()           // 권한 목록 (현재 비어 있음)
         );
     }
+
 
     /**
      * 사용자 이름으로 사용자 정보를 검색합니다.
