@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.validation.BindingResult;
 
 /**
- * UserController는 사용자와 관련된 요청을 처리하는 역할을 한다.
- * 회원가입, 로그인, 아이디 중복 확인 등의 기능을 제공한다.
+ * UserController는 사용자와 관련된 요청을 처리합니다.
+ * 주요 기능:
+        * - 회원가입
+ * - 로그인
+ * - 아이디 중복 확인
  */
 @Controller
 public class UserController {
@@ -32,9 +35,9 @@ public class UserController {
     }
 
     /**
-     * 회원가입 폼 페이지를 반환.
+     * 회원가입 폼 페이지를 반환합니다.
      * @param model 사용자 객체를 뷰로 전달하기 위한 모델
-     * @return register.html 페이지
+     * @return 회원가입 페이지 (register.html)
      */
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -51,6 +54,11 @@ public class UserController {
         return username == null || username.isEmpty();
     }
 
+    /**
+     * 아이디 중복 확인 요청을 처리합니다.
+     * @param username 입력된 사용자 아이디
+     * @return 아이디 사용 가능 여부 메시지
+     */
     @PostMapping("/check-username")
     @ResponseBody
     public String checkUsername(@RequestParam("username") String username) {
