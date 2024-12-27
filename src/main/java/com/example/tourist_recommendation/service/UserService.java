@@ -30,19 +30,21 @@ public class UserService {
     }
 
     /**
-     * 아이디가 이미 사용 중인지 확인.
+     * 아이디가 이미 사용 중인지 확인합니다.
+     *
      * @param username 확인할 사용자 이름
      * @return 아이디가 사용 중이면 true, 아니면 false
      */
     public boolean isUsernameTaken(String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        if (userOptional.isPresent()) {
+        boolean isTaken = !checkUsernameAvailability(username);
+        if (isTaken) {
             System.out.println("Username " + username + " is already taken");
         } else {
             System.out.println("Username " + username + " is available");
         }
-        return userOptional.isPresent();
+        return isTaken;
     }
+
 
     /**
      * 사용자 이름으로 사용자 조회.
