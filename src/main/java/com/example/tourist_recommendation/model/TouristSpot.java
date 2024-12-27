@@ -1,5 +1,7 @@
 package com.example.tourist_recommendation.model;
 
+import java.util.List;
+
 /**
  * TouristSpot 클래스는 관광 명소 정보를 나타내는 모델 클래스이다.
  * 주소, 이름, URL, 평점, 휴관일, 태그, 이미지 경로 등을 포함한다.
@@ -24,39 +26,29 @@ public class TouristSpot {
   // 관광 명소 관련 태그 (쉼표로 구분된 키워드)
   private String tags;
 
-  // 관광 명소 이미지를 저장하는 필드
-  private String image1;
-  private String image2;
-  private String image3;
-  private String image4;
+  // 이미지 필드를 List<String>으로 변경
+  private List<String> images;
 
-  /**
-   * TouristSpot 생성자.
-   * 관광 명소 정보를 초기화한다.
-   *
-   * @param address 관광 명소 주소
-   * @param name 관광 명소 이름
-   * @param url 관광 명소 관련 URL
-   * @param rating 관광 명소 평점
-   * @param closedDay 관광 명소의 휴관일
-   * @param tags 관광 명소 관련 태그
-   * @param image1 첫 번째 이미지 경로
-   * @param image2 두 번째 이미지 경로
-   * @param image3 세 번째 이미지 경로
-   * @param image4 네 번째 이미지 경로
-   */
-  public TouristSpot(String address, String name, String url, double rating, String closedDay, String tags, String image1, String image2, String image3, String image4) {
+  // 수정된 생성자
+  public TouristSpot(String address, String name, String url, double rating, String closedDay, String tags, List<String> images) {
     this.address = address;
     this.name = name;
     this.url = url;
     this.rating = rating;
     this.closedDay = closedDay;
     this.tags = tags;
-    this.image1 = image1;
-    this.image2 = image2;
-    this.image3 = image3;
-    this.image4 = image4;
+    this.images = images;
   }
+
+  // Getter 및 Setter 추가
+  public List<String> getImages() {
+    return images;
+  }
+
+  public void setImages(List<String> images) {
+    this.images = images;
+  }
+
 
   // Getter 및 Setter 메서드
   /**
