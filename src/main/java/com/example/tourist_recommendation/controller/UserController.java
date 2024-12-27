@@ -79,11 +79,15 @@ public class UserController {
         try {
             userService.register(user);
             return "redirect:/login";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register";
         } catch (Exception e) {
-            model.addAttribute("error", "회원가입 중 오류가 발생했습니다.");
+            model.addAttribute("error", "회원가입 중 예상치 못한 오류가 발생했습니다.");
             return "register";
         }
     }
+
 
 
 
