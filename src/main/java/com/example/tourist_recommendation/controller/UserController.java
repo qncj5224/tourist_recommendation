@@ -42,52 +42,39 @@ public class UserController {
     }
 
     /**
-     * 아이디 중복 확인 요청 처리.
-     * @param username 사용자가 입력한 아이디
-     * @return 아이디 사용 가능 여부 메시지
+     * 아이디 유효성을 검사하는 유틸리티 메서드.
+     * @param username 입력된 사용자 아이디
+     * @return 아이디가 null 또는 빈 문자열이면 true, 그렇지 않으면 false
      */
+    private boolean isInvalidUsername(String username) {
+        return username == null || username.isEmpty();
+    }
+
     @PostMapping("/check-username")
     @ResponseBody
     public String checkUsername(@RequestParam("username") String username) {
-        System.out.println("요청된 아이디: " + username); // 로그 출력
-        if (username == null || username.isEmpty()) {
+        if (isInvalidUsername(username)) {
             return "아이디를 입력해주세요.";
         }
-
-        boolean isAvailable = userService.checkUsernameAvailability(username); // 중복 여부 확인
-        System.out.println("사용 가능 여부: " + isAvailable); // 로그 출력
-        return isAvailable ? "아이디 사용 가능" : "이미 존재하는 아이디입니다.";
+        return userService.checkUsernameAvailability(username) ? "아이디 사용 가능" : "이미 존재하는 아이디입니다.";
     }
 
-    /**
-     * 회원가입 요청 처리.
-     * @param user 사용자 입력 데이터
-     * @param model 오류 메시지를 전달하기 위한 모델
-     * @return 회원가입 성공 시 로그인 페이지로 리다이렉트, 실패 시 다시 회원가입 페이지로 이동
-     */
     @PostMapping("/register")
     public String register(User user, Model model) {
-        // 아이디가 입력되지 않은 경우
-        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+        if (isInvalidUsername(user.getUsername())) {
             model.addAttribute("error", "아이디를 입력해주세요.");
             return "register";
         }
 
-        // 아이디 중복 확인
-        if (!userService.checkUsernameAvailability(user.getUsername())) {
-            model.addAttribute("error", "이미 존재하는 아이디입니다.");
-            return "register";
-        }
-
-        // 회원가입 처리
         try {
-            userService.register(user); // 서비스에서 회원가입 처리
-            return "redirect:/login"; // 성공 시 로그인 페이지로 이동
+            userService.register(user);
+            return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("error", "회원가입 중 오류가 발생했습니다.");
-            return "register"; // 실패 시 회원가입 페이지로 이동
+            return "register";
         }
     }
+
 
     /**
      * 로그인 폼 페이지를 반환.
