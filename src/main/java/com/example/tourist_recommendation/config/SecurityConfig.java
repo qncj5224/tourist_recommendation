@@ -9,7 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Spring Security 관련 설정을 정의하는 클래스.
+ * Spring Security 관련 설정을 정의하는 클래스입니다.
+ * - 사용자 인증 및 권한 부여 설정
+ * - HTTP 요청 보안 설정
  */
 @Configuration
 public class SecurityConfig {
@@ -26,8 +28,8 @@ public class SecurityConfig {
     }
 
     /**
-     * BCryptPasswordEncoder를 Bean으로 등록.
-     * 비밀번호를 안전하게 암호화하기 위해 사용.
+     * BCryptPasswordEncoder를 Bean으로 등록합니다.
+     * 비밀번호를 안전하게 암호화하기 위해 사용됩니다.
      * @return BCryptPasswordEncoder 인스턴스
      */
     @Bean
@@ -36,32 +38,42 @@ public class SecurityConfig {
     }
 
     /**
-     * HTTP 요청 보안을 설정.
-     * 특정 URL에 대한 접근 권한 및 로그인/로그아웃 설정을 정의.
+     * HTTP 요청 보안을 설정합니다.
+     * - 인증이 필요 없는 URL 패턴 정의
+     * - 커스텀 로그인 및 로그아웃 설정
+     * - CSRF 및 HTTPS 설정
+     *
      * @param http HttpSecurity 객체를 통해 보안 설정
      * @return SecurityFilterChain 인스턴스
      * @throws Exception 설정 중 발생할 수 있는 예외
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        // 인증이 필요 없는 URL 패턴 설정
-                        .requestMatchers("/check-username", "/register", "/css/**", "/js/**").permitAll()
-                        // 그 외 모든 요청은 인증 필요
-                        .anyRequest().authenticated()
+        http.authorizeHttpRequests(authorize -> {
+                    // 인증이 필요 없는 URL
+                    authorize
+                            .requestMatchers("/check-username", "/register", "/css/**", "/js/**").permitAll()
+                            // 그 외 모든 요청은 인증 필요
+                            .anyRequest().authenticated();
+                })
+                .formLogin(form -> {
+                    // 커스텀 로그인 페이지 설정
+                    form
+                            .loginPage("/login")
+                            .permitAll();
+                })
+                .logout(logout -> {
+                    // 로그아웃 요청 허용
+                    logout.permitAll();
+                })
+                .csrf(csrf -> csrf
+                        // 특정 URL에서 CSRF 보호 비활성화
+                        .ignoringRequestMatchers("/api/**")
                 )
-                .formLogin(form -> form
-                        // 커스텀 로그인 페이지 설정
-                        .loginPage("/login")
-                        // 모든 사용자에게 로그인 페이지 접근 허용
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        // 로그아웃 요청은 인증 없이도 허용
-                        .permitAll()
+                .requiresChannel(channel -> channel
+                        // HTTPS 사용 강제
+                        .anyRequest().requiresSecure()
                 );
-        // 설정된 SecurityFilterChain 반환
         return http.build();
     }
 }
