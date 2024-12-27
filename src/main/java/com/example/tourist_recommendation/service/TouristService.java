@@ -109,4 +109,37 @@ public class TouristService {
     return csvData;
   }
 
+  /**
+   * CSV 데이터 한 줄을 TouristSpot 객체로 변환합니다.
+   *
+   * @param csvRow CSV 데이터 한 줄
+   * @return TouristSpot 객체
+   */
+  private Optional<TouristSpot> parseTouristSpot(String[] csvRow) {
+    if (csvRow.length < 10) {
+      System.out.println("행에 예상보다 적은 데이터가 있습니다: " + String.join(",", csvRow));
+      return Optional.empty();
+    }
+
+    try {
+      String address = csvRow[0].trim();
+      String name = csvRow[1].trim();
+      String url = csvRow[2].trim();
+      double rating = Double.parseDouble(csvRow[3].trim());
+      String tags = csvRow[4].trim().replace("|", ", ");
+      String closedDay = csvRow[5].trim();
+      List<String> images = List.of(
+              csvRow[6].trim(),
+              csvRow[7].trim(),
+              csvRow[8].trim(),
+              csvRow[9].trim()
+      );
+
+      return Optional.of(new TouristSpot(address, name, url, rating, closedDay, tags, images));
+    } catch (Exception e) {
+      System.out.println("데이터 파싱 실패: " + String.join(",", csvRow));
+      return Optional.empty();
+    }
+  }
+
 }
