@@ -36,8 +36,11 @@ public class SecurityConfig {
     }
 
     /**
-     * HTTP 요청 보안을 설정.
-     * 특정 URL에 대한 접근 권한 및 로그인/로그아웃 설정을 정의.
+     * HTTP 요청 보안을 설정합니다.
+     * - 인증이 필요 없는 URL 패턴을 정의
+     * - 커스텀 로그인 및 로그아웃 설정
+     * - 인증이 필요한 기본 URL 처리
+     *
      * @param http HttpSecurity 객체를 통해 보안 설정
      * @return SecurityFilterChain 인스턴스
      * @throws Exception 설정 중 발생할 수 있는 예외
@@ -61,8 +64,7 @@ public class SecurityConfig {
                     // 로그아웃 요청 허용
                     logout.permitAll();
                 });
-
-        // 설정된 SecurityFilterChain 반환
         return http.build();
     }
+
 }
