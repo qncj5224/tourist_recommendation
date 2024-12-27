@@ -1,14 +1,19 @@
 package com.example.tourist_recommendation.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
- * User 엔티티는 사용자 정보를 저장하는 클래스이다.
- * 데이터베이스 테이블 `users`와 매핑되며, 사용자 아이디, 비밀번호, 이메일, 전화번호 등의 정보를 포함한다.
+ * User 엔티티는 사용자 정보를 저장하는 클래스입니다.
+ * Spring Security의 UserDetails 인터페이스를 구현하여 인증에 사용됩니다.
  */
 @Entity
 @Table(name = "users") // 데이터베이스의 "users" 테이블과 매핑
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Primary Key 자동 생성 전략
@@ -29,88 +34,79 @@ public class User {
     @Transient // 이 필드는 데이터베이스에 저장되지 않음
     private String confirmPassword; // 비밀번호 확인용 필드 (UI 상에서 사용)
 
-    // Getters and Setters
-    /**
-     * @return 사용자 고유 식별자
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id 사용자 고유 식별자를 설정
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * @return 사용자 아이디
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * @param username 사용자 아이디를 설정
-     */
+    // Getter 및 Setter (유효성 검사 추가)
     public void setUsername(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("사용자 아이디는 필수 항목입니다.");
+        }
         this.username = username;
     }
 
-    /**
-     * @return 사용자 비밀번호
-     */
+    public void setPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("비밀번호는 필수 항목입니다.");
+        }
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("이메일은 필수 항목입니다.");
+        }
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("전화번호는 필수 항목입니다.");
+        }
+        this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
+
+    // UserDetails 인터페이스 구현
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 권한을 반환 (현재는 빈 리스트 반환)
+        return Collections.emptyList();
+    }
+
+    @Override
     public String getPassword() {
         return password;
     }
 
-    /**
-     * @param password 사용자 비밀번호를 설정
-     */
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
-    /**
-     * @return 사용자 이메일
-     */
-    public String getEmail() {
-        return email;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // 계정 만료되지 않음
     }
 
-    /**
-     * @param email 사용자 이메일을 설정
-     */
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // 계정 잠기지 않음
     }
 
-    /**
-     * @return 사용자 전화번호
-     */
-    public String getPhoneNumber() {
-        return phoneNumber;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // 자격 증명 만료되지 않음
     }
 
-    /**
-     * @param phoneNumber 사용자 전화번호를 설정
-     */
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    /**
-     * @return 비밀번호 확인 필드
-     */
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    /**
-     * @param confirmPassword 비밀번호 확인 필드를 설정
-     */
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+    @Override
+    public boolean isEnabled() {
+        return true; // 계정 활성화 상태
     }
 }
