@@ -42,11 +42,10 @@ public class TouristController {
      */
     @GetMapping("/spot/{name}")
     public String spotDetails(@PathVariable String name, Model model) {
-        TouristSpot spot = touristService.getTouristSpots().stream()
-                .filter(s -> s.getName().equals(name))
-                .findFirst()
-                .orElse(null); // 관광명소가 없으면 null 반환
+        TouristSpot spot = touristService.findSpotByName(name)
+                .orElseThrow(() -> new IllegalArgumentException("Tourist spot not found: " + name));
         model.addAttribute("spot", spot);
         return "tourist_spot_detail";
     }
+
 }

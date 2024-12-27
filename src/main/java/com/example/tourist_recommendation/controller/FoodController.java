@@ -42,11 +42,10 @@ public class FoodController {
      */
     @GetMapping("/food/spot/{name}")
     public String foodSpotDetails(@PathVariable String name, Model model) {
-        FoodSpot spot = foodService.getFoodSpots().stream()
-                .filter(s -> s.getName().equals(name))
-                .findFirst()
-                .orElse(null); // 음식점이 없으면 null 반환
+        FoodSpot spot = foodService.findSpotByName(name)
+                .orElseThrow(() -> new IllegalArgumentException("Food spot not found: " + name));
         model.addAttribute("spot", spot);
         return "food_spot_detail";
     }
+
 }

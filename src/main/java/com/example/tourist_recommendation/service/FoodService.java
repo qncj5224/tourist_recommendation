@@ -11,6 +11,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 
 /**
  * FoodService는 음식점 데이터를 처리하고 제공하는 역할을 담당한다.
@@ -71,4 +73,14 @@ public class FoodService {
     System.out.println("로드된 음식점 수: " + spots.size());
     return spots;
   }
+
+  /**
+   * FoodService는 음식점 데이터를 처리합니다.
+   */
+  public Optional<FoodSpot> findSpotByName(String name) {
+    return getFoodSpots().stream()
+            .filter(spot -> spot.getName().equalsIgnoreCase(name))
+            .findFirst(); // 이름으로 일치하는 음식점 검색
+  }
+
 }
