@@ -29,74 +29,47 @@ public class User {
     @Transient // 이 필드는 데이터베이스에 저장되지 않음
     private String confirmPassword; // 비밀번호 확인용 필드 (UI 상에서 사용)
 
-    // Getters and Setters
-    /**
-     * @return 사용자 고유 식별자
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id 사용자 고유 식별자를 설정
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * @return 사용자 아이디
-     */
-    public String getUsername() {
-        return username;
-    }
-
     /**
      * @param username 사용자 아이디를 설정
+     * @throws IllegalArgumentException 사용자 아이디가 null이거나 비어있는 경우
      */
     public void setUsername(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("사용자 아이디는 필수 항목입니다.");
+        }
         this.username = username;
     }
 
     /**
-     * @return 사용자 비밀번호
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
      * @param password 사용자 비밀번호를 설정
+     * @throws IllegalArgumentException 비밀번호가 null이거나 비어있는 경우
      */
     public void setPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("비밀번호는 필수 항목입니다.");
+        }
         this.password = password;
     }
 
     /**
-     * @return 사용자 이메일
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
      * @param email 사용자 이메일을 설정
+     * @throws IllegalArgumentException 이메일이 null이거나 비어있는 경우
      */
     public void setEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("이메일은 필수 항목입니다.");
+        }
         this.email = email;
     }
 
     /**
-     * @return 사용자 전화번호
-     */
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    /**
      * @param phoneNumber 사용자 전화번호를 설정
+     * @throws IllegalArgumentException 전화번호가 null이거나 비어있는 경우
      */
     public void setPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("전화번호는 필수 항목입니다.");
+        }
         this.phoneNumber = phoneNumber;
     }
 
