@@ -3,33 +3,49 @@ package com.example.tourist_recommendation.model;
 import java.util.List;
 
 /**
- * TouristSpot 클래스는 관광 명소 정보를 나타내는 모델 클래스이다.
- * 주소, 이름, URL, 평점, 휴관일, 태그, 이미지 경로 등을 포함한다.
+ * TouristSpot 클래스는 관광 명소 정보를 나타내는 모델 클래스입니다.
+ * 관광 명소 주소, 이름, URL, 평점, 휴관일, 태그, 이미지 목록 등을 포함합니다.
  */
 public class TouristSpot {
 
-  // 관광 명소 주소
+  // 관광 명소 주소 (필수)
   private String address;
 
-  // 관광 명소 이름
+  // 관광 명소 이름 (필수)
   private String name;
 
-  // 관광 명소 관련 URL (예: 공식 웹사이트, 리뷰 페이지 등)
+  // 관광 명소 관련 URL (옵션)
   private String url;
 
   // 관광 명소 평점 (0.0 ~ 5.0)
   private double rating;
 
-  // 휴관일 (예: 매주 월요일, 공휴일 등)
+  // 관광 명소의 휴관일 정보
   private String closedDay;
 
   // 관광 명소 관련 태그 (쉼표로 구분된 키워드)
   private String tags;
 
-  // 이미지 필드를 List<String>으로 변경
+  // 관광 명소 이미지 목록
   private List<String> images;
 
-  // 수정된 생성자
+  /**
+   * 기본 생성자.
+   */
+  public TouristSpot() {}
+
+  /**
+   * TouristSpot 생성자.
+   * 관광 명소 정보를 초기화합니다.
+   *
+   * @param address 관광 명소 주소
+   * @param name 관광 명소 이름
+   * @param url 관광 명소 관련 URL
+   * @param rating 관광 명소 평점
+   * @param closedDay 관광 명소의 휴관일 정보
+   * @param tags 관광 명소 관련 태그
+   * @param images 관광 명소 이미지 목록
+   */
   public TouristSpot(String address, String name, String url, double rating, String closedDay, String tags, List<String> images) {
     this.address = address;
     this.name = name;
@@ -40,17 +56,8 @@ public class TouristSpot {
     this.images = images;
   }
 
-  // Getter 및 Setter 추가
-  public List<String> getImages() {
-    return images;
-  }
-
-  public void setImages(List<String> images) {
-    this.images = images;
-  }
-
-
   // Getter 및 Setter 메서드
+
   /**
    * @return 관광 명소 주소
    */
@@ -60,6 +67,7 @@ public class TouristSpot {
 
   /**
    * @param address 관광 명소 주소를 설정
+   * @throws IllegalArgumentException 관광 명소 주소가 null이거나 비어있는 경우
    */
   public void setAddress(String address) {
     if (address == null || address.trim().isEmpty()) {
@@ -77,6 +85,7 @@ public class TouristSpot {
 
   /**
    * @param name 관광 명소 이름을 설정
+   * @throws IllegalArgumentException 관광 명소 이름이 null이거나 비어있는 경우
    */
   public void setName(String name) {
     if (name == null || name.trim().isEmpty()) {
@@ -108,6 +117,7 @@ public class TouristSpot {
 
   /**
    * @param rating 관광 명소 평점을 설정
+   * @throws IllegalArgumentException 평점이 0.0에서 5.0 사이가 아닌 경우
    */
   public void setRating(double rating) {
     if (rating < 0.0 || rating > 5.0) {
@@ -117,14 +127,14 @@ public class TouristSpot {
   }
 
   /**
-   * @return 관광 명소의 휴관일
+   * @return 관광 명소의 휴관일 정보
    */
   public String getClosedDay() {
     return closedDay;
   }
 
   /**
-   * @param closedDay 관광 명소의 휴관일을 설정
+   * @param closedDay 관광 명소의 휴관일 정보를 설정
    */
   public void setClosedDay(String closedDay) {
     this.closedDay = closedDay;
@@ -145,61 +155,24 @@ public class TouristSpot {
   }
 
   /**
-   * @return 첫 번째 이미지 경로
+   * @return 관광 명소 이미지 목록
    */
-  public String getImage1() {
-    return image1;
+  public List<String> getImages() {
+    return images;
   }
 
   /**
-   * @param image1 첫 번째 이미지 경로를 설정
+   * @param images 관광 명소 이미지 목록을 설정
    */
-  public void setImage1(String image1) {
-    this.image1 = image1;
+  public void setImages(List<String> images) {
+    this.images = images;
   }
 
   /**
-   * @return 두 번째 이미지 경로
+   * TouristSpot 객체의 정보를 문자열로 반환합니다.
+   *
+   * @return 객체 정보
    */
-  public String getImage2() {
-    return image2;
-  }
-
-  /**
-   * @param image2 두 번째 이미지 경로를 설정
-   */
-  public void setImage2(String image2) {
-    this.image2 = image2;
-  }
-
-  /**
-   * @return 세 번째 이미지 경로
-   */
-  public String getImage3() {
-    return image3;
-  }
-
-  /**
-   * @param image3 세 번째 이미지 경로를 설정
-   */
-  public void setImage3(String image3) {
-    this.image3 = image3;
-  }
-
-  /**
-   * @return 네 번째 이미지 경로
-   */
-  public String getImage4() {
-    return image4;
-  }
-
-  /**
-   * @param image4 네 번째 이미지 경로를 설정
-   */
-  public void setImage4(String image4) {
-    this.image4 = image4;
-  }
-
   @Override
   public String toString() {
     return "TouristSpot{" +
@@ -212,5 +185,4 @@ public class TouristSpot {
             ", images=" + images +
             '}';
   }
-
 }
