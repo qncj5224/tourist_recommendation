@@ -96,9 +96,6 @@ public class UserController {
         }
     }
 
-
-
-
     /**
      * 로그인 폼 페이지를 반환.
      * @return login.html 페이지
@@ -125,19 +122,5 @@ public class UserController {
             result.rejectValue("username", "error.user", e.getMessage());
             return "register"; // 실패 시 다시 회원가입 페이지로 이동
         }
-    }
-
-    /**
-     * 사용자 등록 처리 (단순 성공/실패 처리).
-     * @param user 사용자 입력 데이터
-     * @param result 입력 데이터 검증 결과
-     * @return 성공 시 성공 페이지로 리다이렉트
-     */
-    @PostMapping("/process-registratio")
-    public String processRegistration(User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return "register"; // 검증 실패 시 회원가입 페이지로 이동
-        }
-        return "redirect:/success"; // 성공 시 성공 페이지로 리다이렉트
     }
 }
