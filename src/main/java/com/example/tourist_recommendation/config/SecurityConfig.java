@@ -49,31 +49,22 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> {
-                    // 인증이 필요 없는 URL
-                    authorize
-                            .requestMatchers("/check-username", "/register", "/css/**", "/js/**").permitAll()
-                            // 그 외 모든 요청은 인증 필요
-                            .anyRequest().authenticated();
-                })
-                .formLogin(form -> {
-                    // 커스텀 로그인 페이지 설정
-                    form
-                            .loginPage("/login")
-                            .permitAll();
-                })
-                .logout(logout -> {
-                    // 로그아웃 요청 허용
-                    logout.permitAll();
-                })
-                .csrf(csrf -> csrf
-                        // 특정 URL에서 CSRF 보호 비활성화
-                        .ignoringRequestMatchers("/api/**")
+        http
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll() // 로그인 및 회원가입 허용
+                        .anyRequest().authenticated()
                 )
-                .requiresChannel(channel -> channel
-                        // HTTPS 사용 강제
-                        .anyRequest().requiresInsecure() // HTTPS 강제 비활성화 (로컬)
+                .formLogin(form -> form
+                        .loginPage("/login") // 로그인 페이지 경로
+                        .loginProcessingUrl("/login") // 로그인 처리 경로
+                        .defaultSuccessUrl("/", true) // 로그인 성공 시 리다이렉트 경로
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login") // 로그아웃 후 이동할 경로
+                        .permitAll()
                 );
         return http.build();
     }
+
 }
