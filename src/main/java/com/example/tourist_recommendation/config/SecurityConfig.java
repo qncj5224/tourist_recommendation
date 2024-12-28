@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -27,11 +28,6 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-    /**
-     * BCryptPasswordEncoder를 Bean으로 등록합니다.
-     * 비밀번호를 안전하게 암호화하기 위해 사용됩니다.
-     * @return BCryptPasswordEncoder 인스턴스
-     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -63,7 +59,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login") // 로그아웃 후 이동할 경로
                         .permitAll()
-                );
+                )
+                .csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 비활성화
         return http.build();
     }
 

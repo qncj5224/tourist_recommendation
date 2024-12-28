@@ -37,23 +37,7 @@ public class UserService {
      * @return 아이디가 사용 중이면 true, 아니면 false
      */
     public boolean isUsernameTaken(String username) {
-        boolean isTaken = !checkUsernameAvailability(username);
-        if (isTaken) {
-            System.out.println("Username " + username + " is already taken");
-        } else {
-            System.out.println("Username " + username + " is available");
-        }
-        return isTaken;
-    }
-
-    /**
-     * 아이디의 사용 가능 여부를 확인합니다.
-     *
-     * @param username 확인할 사용자 이름
-     * @return 사용 가능하면 true, 사용 중이면 false
-     */
-    public boolean checkUsernameAvailability(String username) {
-        return !userRepository.existsByUsername(username);
+        return userRepository.existsByUsername(username);
     }
 
     /**
@@ -66,38 +50,38 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    /**
-     * 사용자 등록.
-     * 아이디 중복 여부를 확인하고, 비밀번호를 암호화하여 저장합니다.
-     *
-     * @param user 등록할 사용자 객체
-     * @throws UsernameAlreadyExistsException 아이디가 이미 존재할 경우 예외 발생
-     */
-    public void register(User user) throws UsernameAlreadyExistsException {
-        if (isUsernameTaken(user.getUsername())) {
-            throw new UsernameAlreadyExistsException("이미 사용 중인 아이디입니다: " + user.getUsername());
+    public void register(User user) {
+        // 비밀번호와 비밀번호 확인 비교 (암호화 전)
+        if (user.getPassword() == null || user.getConfirmPassword() == null) {
+            throw new IllegalArgumentException("비밀번호와 비밀번호 확인은 필수 항목입니다.");
         }
-        user.setPassword(encryptPassword(user.getPassword()));
-        saveUser(user);
+
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        }
+
+        // 비밀번호 암호화
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 
-    /**
-     * 비밀번호를 암호화합니다.
-     *
-     * @param password 원본 비밀번호
-     * @return 암호화된 비밀번호
-     */
-    private String encryptPassword(String password) {
-        return passwordEncoder.encode(password);
-    }
+
 
     /**
      * 사용자 객체를 데이터베이스에 저장합니다.
+     * 비밀번호가 이미 암호화된 상태에서만 호출해야 합니다.
      *
      * @param user 저장할 사용자 객체
      */
-    private void saveUser(User user) {
+    public void saveUser(User user) {
         userRepository.save(user);
     }
-}
 
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
+}

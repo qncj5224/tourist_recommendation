@@ -85,28 +85,31 @@ public class User implements UserDetails {
         return password;
     }
 
+    public String getEmail() {
+        return email; // 반환 타입이 String이어야 합니다.
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     @Override
     public String getUsername() {
         return username;
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true; // 계정 만료되지 않음
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true; // 계정 잠기지 않음
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true; // 자격 증명 만료되지 않음
-    }
-
-    @Override
     public boolean isEnabled() {
         return true; // 계정 활성화 상태
     }
+
+    // 추가: confirmPassword의 Getter와 Setter
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
 }
