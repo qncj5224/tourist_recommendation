@@ -6,10 +6,13 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Spring Security 관련 설정을 정의하는 클래스.
+ * Spring Security 관련 설정을 정의하는 클래스입니다.
+ * - 사용자 인증 및 권한 부여 설정
+ * - HTTP 요청 보안 설정
  */
 @Configuration
 public class SecurityConfig {
@@ -25,19 +28,17 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-    /**
-     * BCryptPasswordEncoder를 Bean으로 등록.
-     * 비밀번호를 안전하게 암호화하기 위해 사용.
-     * @return BCryptPasswordEncoder 인스턴스
-     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     /**
-     * HTTP 요청 보안을 설정.
-     * 특정 URL에 대한 접근 권한 및 로그인/로그아웃 설정을 정의.
+     * HTTP 요청 보안을 설정합니다.
+     * - 인증이 필요 없는 URL 패턴 정의
+     * - 커스텀 로그인 및 로그아웃 설정
+     * - CSRF 및 HTTPS 설정
+     *
      * @param http HttpSecurity 객체를 통해 보안 설정
      * @return SecurityFilterChain 인스턴스
      * @throws Exception 설정 중 발생할 수 있는 예외
@@ -46,22 +47,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        // 인증이 필요 없는 URL 패턴 설정
-                        .requestMatchers("/check-username", "/register", "/css/**", "/js/**").permitAll()
-                        // 그 외 모든 요청은 인증 필요
+                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll() // 로그인 및 회원가입 허용
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        // 커스텀 로그인 페이지 설정
-                        .loginPage("/login")
-                        // 모든 사용자에게 로그인 페이지 접근 허용
+                        .loginPage("/login") // 로그인 페이지 경로
+                        .loginProcessingUrl("/login") // 로그인 처리 경로
+                        .defaultSuccessUrl("/", true) // 로그인 성공 시 리다이렉트 경로
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        // 로그아웃 요청은 인증 없이도 허용
+                        .logoutSuccessUrl("/login") // 로그아웃 후 이동할 경로
                         .permitAll()
-                );
-        // 설정된 SecurityFilterChain 반환
+                )
+                .csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 비활성화
         return http.build();
     }
+
 }
