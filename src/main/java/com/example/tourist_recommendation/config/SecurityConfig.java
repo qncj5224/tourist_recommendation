@@ -72,7 +72,7 @@ public class SecurityConfig {
                 )
                 .requiresChannel(channel -> channel
                         // HTTPS 사용 강제
-                        .anyRequest().requiresSecure()
+                        .anyRequest().requiresInsecure() // HTTPS 강제 비활성화 (로컬)
                 );
         return http.build();
     }
