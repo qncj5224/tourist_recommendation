@@ -1,12 +1,15 @@
 package com.example.tourist_recommendation.service;
 
+import com.example.tourist_recommendation.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import com.example.tourist_recommendation.model.User;
+
+import com.example.tourist_recommendation.repository.UserRepository;
+
 import java.util.ArrayList;
 
 /**
@@ -16,19 +19,19 @@ import java.util.ArrayList;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     /**
-     * UserService 의존성을 주입받는 생성자.
-     * @param userService 사용자 관련 비즈니스 로직을 처리하는 서비스
+     * UserRepository 의존성을 주입받는 생성자.
+     * @param userRepository 사용자 정보를 관리하는 리포지토리
      */
     @Autowired
-    public UserDetailsServiceImpl(@Lazy UserService userService) {  // @Lazy로 순환 참조 문제 방지
-        this.userService = userService;
+    public UserDetailsServiceImpl(@Lazy UserRepository userRepository) {  // @Lazy로 순환 참조 문제 방지
+        this.userRepository = userRepository;
     }
 
     /**
-     * 사용자 이름으로 사용자 정보를 로드한다.
+     * 사용자 이름으로 사용자 정보를 로드합니다.
      *
      * @param username 사용자 이름
      * @return UserDetails Spring Security의 사용자 정보 객체
@@ -36,15 +39,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // UserService를 통해 사용자 정보를 검색
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        // 데이터베이스에서 사용자 정보 조회
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-        // Spring Security의 User 객체로 변환하여 반환
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),         // 사용자 이름
-                user.getPassword(),         // 암호화된 비밀번호
-                new ArrayList<>()           // 권한 목록 (현재 비어 있음)
-        );
+        return user; // User 클래스 자체가 UserDetails를 구현하므로 바로 반환 가능
     }
 }
