@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -28,6 +27,11 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * BCryptPasswordEncoder를 빈으로 등록합니다.
+     * - 비밀번호 암호화에 사용됩니다.
+     * @return BCryptPasswordEncoder 인스턴스
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -48,20 +52,30 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll() // 로그인 및 회원가입 허용
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated() // 기타 모든 요청은 인증 필요
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // 로그인 페이지 경로
+                        .loginPage("/login") // 커스텀 로그인 페이지
                         .loginProcessingUrl("/login") // 로그인 처리 경로
-                        .defaultSuccessUrl("/", true) // 로그인 성공 시 리다이렉트 경로
-                        .permitAll()
+                        .defaultSuccessUrl("/", true) // 로그인 성공 시 리다이렉트
+                        .permitAll() // 로그인 페이지는 모든 사용자 접근 가능
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login") // 로그아웃 후 이동할 경로
-                        .permitAll()
+                        .permitAll() // 로그아웃 URL은 모두 접근 가능
                 )
-                .csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 비활성화
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**") // API 요청에 대해 CSRF 검증 제외
+                )
+                .headers(headers -> headers
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true) // HSTS 설정
+                                .maxAgeInSeconds(31536000) // 1년 동안 유지
+                        )
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("default-src 'self'; script-src 'self' https://code.jquery.com; style-src 'self'")
+                        )
+                );
         return http.build();
     }
-
 }
